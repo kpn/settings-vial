@@ -1,12 +1,10 @@
 tox
-isort
-flake8
-black
 pkgversion
 
 # PyTest for running the tests.
 pytest
 pytest-cov
+pytest-mock
 
 # docs
 sphinx

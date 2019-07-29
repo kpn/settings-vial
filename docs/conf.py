@@ -35,11 +35,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
-    # 'sphinxcontrib.plantuml',
 ]
-
-# plantuml_jar_path = os.path.abspath('./_plantuml/plantuml.jar')
-# plantuml = 'java -Djava.awt.headless=true -jar {0}'.format(plantuml_jar_path)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

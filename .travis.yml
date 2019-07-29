@@ -1,19 +1,29 @@
 language: python
-sudo: required
-services:
-  - docker
-script:
-  - make docker/build
+stages:
+- lint
+- test
 before_install:
-  - pip install codecov
-after_success:
-  - codecov
+- pip install codecov
+install:
+- pip install tox-travis
+script: tox
+jobs:
+  include:
+  - python: '3.5'
+  - python: '3.6'
+  - python: '3.7'
+    dist: xenial
+    after_success:
+    - codecov
+  - stage: lint
+    python: '3.7'
+    script:
+    - tox -e lint,isort-check,black-check
 deploy:
   provider: pypi
   user: kpn-digital
   skip_cleanup: true
   password:
-    secure: ...travis encrypt --add deploy.password...
+    secure: IiOg9NQbTruUhadjJ9SL+OSC/x/uEF88gVCReQABaGc4OBo2ce89WxJNb1JDxuOgvTL+3fwdlwLu7TB3Lfu8JczKfvUb8yAUcYcnCBF74ornJL1dZW5ro6AAdUYY5oOnsv5NDcU/GAXHjLtv0Im/hsnWG/cqzfhPcP5hVuqysupEmFWLfo4ygkue6ZLZ4EV7wknPGtEGeF/e0C1zJiWWH8MtUvhMf+WrBZU17Oz6B3MsNnz6tgt4udScBl+yukc+vW2Dy7/7LvN92WsLQXGVhsaqe0aPvWFxKM7TUEn2CGr8b0lZSR8LWS5Qv4GO/QogFmsomK21E0zQNXnLS2NNBtGHT5wfsBY1e5PZm4ggI/zSGgVvj0MrVuXaOZGx/F+KomkPOrkjlFCjQsv7B4kNrPrMhxQl0x89NHK8Ssnhqy9fW29SIie2/d9p7XvbL9XHdq0T6q03T4kA2iak/vJfQyOVv0ufZ69EusDkCRiyUMk4rdEL0TY8UI5yS6NFLgWtPdadNwyKb5uEw7iUgvBCOOL96m9IedFP7/QR/fIUmZ7Hehr9kTyKSWtR60+usgLQ0V69ZBpAjzi8x+u7+qLE0s+dgi9HQdhktl/LqjZswO/k14RRkDJGJx3yVtaY8eL57aa6b2OAcdF1nKbiLO4eLnN4PSwTdQceO/XKxrpCU3U=
   on:
     tags: true
-    all_branches: true

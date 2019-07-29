@@ -148,7 +148,6 @@ nosetests.xml
 coverage.xml
 *,cover
 .pytest_cache/
-setup.py
 
 # Translations
 *.mo
