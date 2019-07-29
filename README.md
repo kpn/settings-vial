@@ -2,12 +2,9 @@
 
 Python settings for cloud environments
 
-[![image](https://secure.travis-ci.org/kpn/settings-vial.svg?branch=master)](https://travis-ci.org/kpn/settings-vial?branch=master)
-
+[![image](https://secure.travis-ci.com/kpn/settings-vial.svg?branch=master)](https://travis-ci.com/kpn/settings-vial?branch=master)
 [![image](https://img.shields.io/codecov/c/github/kpn/settings-vial/master.svg)](https://codecov.io/github/kpn/settings-vial?branch=master)
-
 [![image](https://img.shields.io/pypi/v/settings-vial)](https://pypi.python.org/pypi/settings-vial)
-
 [![image](https://readthedocs.org/projects/settings-vial/badge/?version=latest)](https://settings-vial.readthedocs.org/en/latest/?badge=latest)
 
 ## Usage
