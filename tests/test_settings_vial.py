@@ -25,7 +25,7 @@ def mock_environment(monkeypatch):
 
 
 @pytest.fixture
-def override_callable():
+def override_keys_function():
     return lambda: ['KEY']
 
 
@@ -42,41 +42,41 @@ class TestEnvironmentSettings:
         assert settings.DEBUG is True
         assert settings.HASH == {'dict': 'test'}
 
-    def test_load_environment_with_override_keys(self, mock_environment, override_callable):
-        settings = Settings(env_prefix="PREFIX_", override_prefix="OVERRIDE_", override_callable=override_callable)
+    def test_load_environment_with_override_keys(self, mock_environment, override_keys_function):
+        settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
         settings.load_env()
 
         assert settings.DEBUG is False
         assert settings.HASH == {'dict': 'test'}
 
     def test_missing_missing_override_key_from_callable_raises_warning(
-        self, mock_environment, override_callable, mocker
+        self, mock_environment, override_keys_function, mocker
     ):
-        settings = Settings(env_prefix="PREFIX_", override_prefix="OVERRIDE_", override_callable=override_callable)
-        mocker.patch.object(settings, 'override_callable')
-        settings.override_callable.return_value = ['MISSING_KEY']
+        settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
+        mocker.patch.object(settings, 'override_keys_function')
+        settings.override_keys_function.return_value = ['MISSING_KEY']
         settings.load_env()
 
         with pytest.warns(MissingOverrideKeysWarning):
             assert settings.DEBUG is True
 
-        settings.override_callable.return_value = []
+        settings.override_keys_function.return_value = []
         assert settings.HASH == {'dict': 'test'}
         assert settings.DEBUG is True
 
-    def test_override_callable_not_callable_raises_warning(self, mock_environment):
-        settings = Settings(env_prefix="PREFIX_", override_prefix="OVERRIDE_", override_callable=['KEY'])
+    def test_override_keys_function_not_callable_raises_warning(self, mock_environment):
+        settings = Settings("PREFIX_", "OVERRIDE_", ['KEY'])
         settings.load_env()
 
         with pytest.warns(NotCallableWarning):
             assert settings.DEBUG is True
 
-    def test_override_callable_does_not_return_list_or_set_raises_warning(
-        self, mock_environment, override_callable, mocker
+    def test_override_keys_function_does_not_return_list_or_set_raises_warning(
+        self, mock_environment, override_keys_function, mocker
     ):
-        settings = Settings(env_prefix="PREFIX_", override_prefix="OVERRIDE_", override_callable=override_callable)
-        mocker.patch.object(settings, 'override_callable')
-        settings.override_callable.return_value = "KEY1, KEY2"
+        settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
+        mocker.patch.object(settings, 'override_keys_function')
+        settings.override_keys_function.return_value = "KEY1, KEY2"
         settings.load_env()
 
         with pytest.warns(UnsupportedSetTypeWarning):

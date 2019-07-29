@@ -10,7 +10,7 @@ class Settings:
 
     :param env_prefix: prefix to be used when looking through the environment for variables
     :param override_prefix: prefix to be used when looking for overrideable variables
-    :param override_callable: callable to be used when retrieving the set of keys to be overriden
+    :param override_keys_function: function returning a set of keys to be used as overrides
 
     Usage::
 
@@ -23,10 +23,10 @@ class Settings:
         42
     """
 
-    def __init__(self, env_prefix, override_prefix=None, override_callable=None):
+    def __init__(self, env_prefix, override_prefix=None, override_keys_function=None):
         self.env_prefix = env_prefix
         self.override_prefix = override_prefix
-        self.override_callable = override_callable
+        self.override_keys_function = override_keys_function
         self._config = {}
         self._override_config = {}
 
@@ -36,7 +36,7 @@ class Settings:
     __str__ = __repr__
 
     def __getattr__(self, attr):
-        if self.override_prefix and self.override_callable:
+        if self.override_prefix and self.override_keys_function:
             override_set = self._load_override_set()
 
             if override_set - set(self._override_config):
@@ -57,11 +57,11 @@ class Settings:
             raise AttributeError("{} has no attribute {}".format(self, attr))
 
     def _load_override_set(self):
-        if not callable(self.override_callable):
+        if not callable(self.override_keys_function):
             warnings.warn("The callable provided is not a function", NotCallableWarning)
             return set()
 
-        override_set = self.override_callable()
+        override_set = self.override_keys_function()
 
         if not isinstance(override_set, list) and not isinstance(override_set, set):
             warnings.warn("Override callable does not return a set or a list", UnsupportedSetTypeWarning)
