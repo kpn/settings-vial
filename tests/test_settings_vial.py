@@ -7,7 +7,7 @@ Tests for `settings-vial` module.
 
 import pytest
 from settings_vial import Settings
-from settings_vial.exceptions import MissingOverrideKeys, NotCallable, UnsupportedSetType
+from settings_vial.exceptions import MissingOverrideKeysWarning, NotCallableWarning, UnsupportedSetTypeWarning
 
 
 @pytest.fixture
@@ -57,7 +57,7 @@ class TestEnvironmentSettings:
         settings.override_callable.return_value = ['MISSING_KEY']
         settings.load_env()
 
-        with pytest.warns(MissingOverrideKeys):
+        with pytest.warns(MissingOverrideKeysWarning):
             assert settings.DEBUG is True
 
         settings.override_callable.return_value = []
@@ -68,7 +68,7 @@ class TestEnvironmentSettings:
         settings = Settings(env_prefix="PREFIX_", override_prefix="OVERRIDE_", override_callable=['KEY'])
         settings.load_env()
 
-        with pytest.warns(NotCallable):
+        with pytest.warns(NotCallableWarning):
             assert settings.DEBUG is True
 
     def test_override_callable_does_not_return_list_or_set_raises_warning(
@@ -79,7 +79,7 @@ class TestEnvironmentSettings:
         settings.override_callable.return_value = "KEY1, KEY2"
         settings.load_env()
 
-        with pytest.warns(UnsupportedSetType):
+        with pytest.warns(UnsupportedSetTypeWarning):
             assert settings.HASH == {'dict': 'test'}
             assert settings.DEBUG is True
 

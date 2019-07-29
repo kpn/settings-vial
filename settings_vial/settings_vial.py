@@ -2,7 +2,7 @@ import json
 import warnings
 from os import environ
 
-from .exceptions import MissingOverrideKeys, NotCallable, UnsupportedSetType
+from .exceptions import MissingOverrideKeysWarning, NotCallableWarning, UnsupportedSetTypeWarning
 
 
 class Settings:
@@ -42,7 +42,7 @@ class Settings:
             if override_set - set(self._override_config):
                 warnings.warn(
                     "There's no configuration with override keys {}".format(override_set - set(self._override_config)),
-                    MissingOverrideKeys,
+                    MissingOverrideKeysWarning,
                 )
 
             for key in override_set:
@@ -58,13 +58,13 @@ class Settings:
 
     def _load_override_set(self):
         if not callable(self.override_callable):
-            warnings.warn("The callable provided is not a function", NotCallable)
+            warnings.warn("The callable provided is not a function", NotCallableWarning)
             return set()
 
         override_set = self.override_callable()
 
         if not isinstance(override_set, list) and not isinstance(override_set, set):
-            warnings.warn("Override callable does not return a set or a list", UnsupportedSetType)
+            warnings.warn("Override callable does not return a set or a list", UnsupportedSetTypeWarning)
             return set()
 
         return set(override_set)
