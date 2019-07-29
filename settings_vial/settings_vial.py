@@ -70,19 +70,22 @@ class Settings:
         return set(override_set)
 
     def load_env(self):
-        """ Loads configuration from environment variables as json encoded.
+        r""" Loads configuration from environment variables as json encoded.
 
-        Will load all environment variables containing :param env_prefix: as a prefix and strip
-        the prefix so you can access it through attributes normally: `settings.VAR`.
+        Will load all environment variables containing **env_prefix** as a prefix and strip
+        the prefix so you can access it through attributes normally: ``settings.VAR``.
 
-        If :param override_prefix: is provided it will also extract all settings containing this prefix
-        into a separate dictionary but accessible within the same :class: `Settings <Settings>` object.
+        If **override_prefix** is provided it will also extract all settings containing this prefix
+        into a separate dictionary but accessible within the same :class:`settings_vial.Settings <Settings>` object.
         The override prefix is also stripped out, and these dynamic settings will consider the first
-        string under a `_` split to be its key.
+        string under a ``_`` split to be its key.
         """
         for var, value in environ.items():
             if var.startswith(self.env_prefix):
                 _, var_name = var.split(self.env_prefix, 1)
+                # This try/except is needed to catch plain strings, for all the other types the JSON Decoder
+                # works as expected, but when trying to load a plain string it fails expecting it to be
+                # surrouded with `{}`.
                 try:
                     json_value = json.loads(value)
                 except json.decoder.JSONDecodeError:
@@ -94,6 +97,17 @@ class Settings:
             self._load_overrides()
 
     def _load_overrides(self):
+        r""" Traverses through the already loaded prefixed environment variables and
+        extracts the overridable ones.
+
+        If any of the environment variables loaded contains **override_prefix** the prefix will be stripped
+        and the variable moved from the main `_config` dictionary to `_override_config` and it will be placed under
+        the key that is provided right next to the **override_prefix**, which is also stripped from the variable name.
+
+        The `override_key` has to be a single string since the split is done in the first `_`.
+        **OK:** PREFIX_OVERRIDE_KEY123_MY_VAR
+        **Not OK:** PREFIX_OVERRIDE_KEY_123_MY_VAR
+        """
         vars_to_delete = []
         for var in self._config:
             if var.startswith(self.override_prefix):

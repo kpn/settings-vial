@@ -3,20 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Python settings for cloud environments
-======================================
+Settings Vial - Cloud native settings
+=====================================
 
-Contents:
+Quickstart
+----------
+
+``$ export MY_APP_TEST_VAR=42``
+
+    >>> from settings_vial imoprt Settings
+    >>> settings = Settings(env_preifx="MY_APP_")
+    >>> settings.load_env()
+    >>> settings.TEST_VAR
+    42
+
+
+API Reference
+-------------
+
+In case you are looking for information on a specific function, class, or method.
 
 .. toctree::
    :maxdepth: 2
 
-   installation
-   usage
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   api
