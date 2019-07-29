@@ -12,9 +12,9 @@ TOX=$(shell "$(CMD_FROM_VENV)" "tox")
 PYTHON=$(shell "$(CMD_FROM_VENV)" "python")
 TOX_PY_LIST="$(shell $(TOX) -l | grep ^py | xargs | sed -e 's/ /,/g')"
 
-.PHONY: clean docsclean pyclean test lint isort format docs docker setup.py
+.PHONY: clean docsclean pyclean test lint isort format docs docker
 
-tox: venv setup.py
+tox: venv
 	$(TOX)
 
 pyclean:
@@ -59,8 +59,4 @@ docker:
 docker/%:
 	$(DOCKER_COMPOSE) run --rm app make $*
 
-setup.py: venv
-	$(PYTHON) setup_gen.py
-	@$(PYTHON) setup.py check --restructuredtext
-
-build: clean venv tox setup.py
+build: clean venv tox
