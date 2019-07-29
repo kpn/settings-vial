@@ -34,13 +34,24 @@ class TestEnvironmentSettings:
         settings = Settings(env_prefix="PREFIX_")
         settings.load_env()
 
+        assert settings.DEBUG is True
+        assert settings.HASH == {'dict': 'test'}
+
+    def test_load_environment_does_not_load_unprefixed_vars(self, mock_environment):
+        settings = Settings(env_prefix="PREFIX_")
+        settings.load_env()
+
         with pytest.raises(AttributeError):
             settings.USER
+
+    def test_load_environment_with_prefix_strips_out_prefix(self, mock_environment):
+        settings = Settings(env_prefix="PREFIX_")
+        settings.load_env()
+
         with pytest.raises(AttributeError):
             settings.PREFIX_DEBUG
 
         assert settings.DEBUG is True
-        assert settings.HASH == {'dict': 'test'}
 
     def test_load_environment_with_override_keys(self, mock_environment, override_keys_function):
         settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
