@@ -13,6 +13,7 @@ setup(
     setup_requires=["setuptools_scm"],
     description="Python settings for cloud environments",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Charles David de Moraes",
     author_email="charles.moraes@kpn.com",
     url="https://github.com/kpn/settings-vial",

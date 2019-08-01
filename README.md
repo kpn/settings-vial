@@ -19,7 +19,7 @@ $ export MY_APP_TEST_VAR=42
 >>> from settings_vial import Settings
 >>> settings = Settings(env_prefix="MY_APP_")
 >>> settings.load_env()
->>> setttings.TEST_VAR
+>>> settings.TEST_VAR
 42
 ```
 
