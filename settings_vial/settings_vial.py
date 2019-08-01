@@ -23,10 +23,13 @@ class Settings:
         42
     """
 
-    def __init__(self, env_prefix, override_prefix=None, override_keys_function=None):
+    def __init__(
+        self, env_prefix, override_prefix=None, override_keys_function=None, override_keys_reverse_lookup=False
+    ):
         self.env_prefix = env_prefix
         self.override_prefix = override_prefix
         self.override_keys_function = override_keys_function
+        self.override_keys_reverse_lookup = override_keys_reverse_lookup
         self._config = {}
         self._override_config = {}
 
@@ -37,15 +40,20 @@ class Settings:
 
     def __getattr__(self, attr):
         if self.override_prefix and self.override_keys_function:
-            override_set = self._load_override_set()
+            override_keys = self._load_override_keys()
 
-            if override_set - set(self._override_config):
+            if set(override_keys) - set(self._override_config):
                 warnings.warn(
-                    "There's no configuration with override keys {}".format(override_set - set(self._override_config)),
+                    "There's no configuration with override keys {}".format(
+                        set(override_keys) - set(self._override_config)
+                    ),
                     MissingOverrideKeysWarning,
                 )
 
-            for key in override_set:
+            if self.override_keys_reverse_lookup:
+                override_keys = reversed(override_keys)
+
+            for key in override_keys:
                 try:
                     return self._override_config[key][attr]
                 except KeyError:
@@ -56,18 +64,18 @@ class Settings:
         except KeyError:
             raise AttributeError("{} has no attribute {}".format(self, attr))
 
-    def _load_override_set(self):
+    def _load_override_keys(self):
         if not callable(self.override_keys_function):
             warnings.warn("The callable provided is not a function", NotCallableWarning)
-            return set()
+            return tuple()
 
-        override_set = self.override_keys_function()
+        override_keys = self.override_keys_function()
 
-        if not isinstance(override_set, list) and not isinstance(override_set, set):
-            warnings.warn("Override callable does not return a set or a list", UnsupportedSetTypeWarning)
-            return set()
+        if not isinstance(override_keys, (list, tuple)):
+            warnings.warn("Override callable does not return a tuple or a list", UnsupportedSetTypeWarning)
+            return tuple()
 
-        return set(override_set)
+        return override_keys
 
     def load_env(self):
         r""" Loads configuration from environment variables as json encoded.
