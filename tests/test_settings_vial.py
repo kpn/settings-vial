@@ -30,7 +30,7 @@ def mock_environment(monkeypatch):
 
 @pytest.fixture
 def override_keys_function():
-    return lambda: ['KEY']
+    return lambda: ["KEY"]
 
 
 class TestEnvironmentSettings:
@@ -39,7 +39,7 @@ class TestEnvironmentSettings:
         settings.load_env()
 
         assert settings.DEBUG is True
-        assert settings.HASH == {'dict': 'test'}
+        assert settings.HASH == {"dict": "test"}
 
     def test_load_environment_does_not_load_unprefixed_vars(self, mock_environment):
         settings = Settings(env_prefix="PREFIX_")
@@ -62,25 +62,25 @@ class TestEnvironmentSettings:
         settings.load_env()
 
         assert settings.DEBUG is False
-        assert settings.HASH == {'dict': 'test'}
+        assert settings.HASH == {"dict": "test"}
 
     def test_missing_missing_override_key_from_callable_raises_warning(
         self, mock_environment, override_keys_function, mocker
     ):
         settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
-        mocker.patch.object(settings, 'override_keys_function')
-        settings.override_keys_function.return_value = ['MISSING_KEY']
+        mocker.patch.object(settings, "override_keys_function")
+        settings.override_keys_function.return_value = ["MISSING_KEY"]
         settings.load_env()
 
         with pytest.warns(MissingOverrideKeysWarning):
             assert settings.DEBUG is True
 
         settings.override_keys_function.return_value = []
-        assert settings.HASH == {'dict': 'test'}
+        assert settings.HASH == {"dict": "test"}
         assert settings.DEBUG is True
 
     def test_override_keys_function_not_callable_raises_warning(self, mock_environment):
-        settings = Settings("PREFIX_", "OVERRIDE_", ['KEY'])
+        settings = Settings("PREFIX_", "OVERRIDE_", ["KEY"])
         settings.load_env()
 
         with pytest.warns(NotCallableWarning):
@@ -90,12 +90,12 @@ class TestEnvironmentSettings:
         self, mock_environment, override_keys_function, mocker
     ):
         settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
-        mocker.patch.object(settings, 'override_keys_function')
+        mocker.patch.object(settings, "override_keys_function")
         settings.override_keys_function.return_value = "KEY1, KEY2"
         settings.load_env()
 
         with pytest.warns(UnsupportedSetTypeWarning):
-            assert settings.HASH == {'dict': 'test'}
+            assert settings.HASH == {"dict": "test"}
             assert settings.DEBUG is True
 
     def test_prefix_gets_stripped_once_only(self, mock_environment):
@@ -108,7 +108,7 @@ class TestEnvironmentSettings:
         self, mock_environment, override_keys_function, mocker
     ):
         settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function)
-        mocker.patch.object(settings, 'override_keys_function')
+        mocker.patch.object(settings, "override_keys_function")
         settings.override_keys_function.return_value = ("KEY1", "KEY2")
         settings.load_env()
         assert settings.VALUE_1 == "key1-value-1"
@@ -117,7 +117,7 @@ class TestEnvironmentSettings:
 
     def test_override_keys_reverse_lookup(self, mock_environment, override_keys_function, mocker):
         settings = Settings("PREFIX_", "OVERRIDE_", override_keys_function, override_keys_reverse_lookup=True)
-        mocker.patch.object(settings, 'override_keys_function')
+        mocker.patch.object(settings, "override_keys_function")
         settings.override_keys_function.return_value = ("KEY1", "KEY2")
         settings.load_env()
         assert settings.VALUE_1 == "key2-value-1"
@@ -134,8 +134,8 @@ class TestSettingsTypes:
             "PREFIX_FLOAT": "3.14",
             "PREFIX_LIST": '["string", 42, 3.14, {"dict": "test"}]',
             "PREFIX_DICT": '{"dict": "test"}',
-            "PREFIX_BOOL": 'true',
-            "PREFIX_NONE": 'null',
+            "PREFIX_BOOL": "true",
+            "PREFIX_NONE": "null",
         }
 
         for var, value in env_dict.items():
