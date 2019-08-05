@@ -1,42 +1,40 @@
-# settings-vial Change Log
+# Changelog
 
-## [0.1.0] - 2019-07-29
 
-### Added
-- Prefixed environment variables loading
-- Dynamic settings support
+## (unreleased)
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and should contain all notable changes to the project made for humans.
+### Fixes
 
-## [Unreleased]
+* FIX: make pypi page formatted. [Pavel Kamaev]
 
-All unreleased changes should be added to appropriate section below
+### Optimizations
 
-### Added
-New features
--
+* OPT: blackify. [Pavel Kamaev]
 
-### Changed
-Changes in existing functionality
--
+### Other
 
-### Deprecated
-Once-stable features removed in upcoming releases
--
+* OPT(docs): Added changelog generation. [Ricardo Alves]
 
-### Removed
-Deprecated featured removed in this release
--
+* OPT(docs): Improved readme. [Ricardo Alves]
 
-### Fixed
-Any bug fixes
--
 
-### Security
-Invite users to upgrade in case of vulnerabilities
--
 
-## [0.0.1] - YYYY-MM-DD
+## 0.1.3 (2019-08-01)
 
-Adhere to [semantic versioning](http://semver.org/) and [ISO date format](http://www.iso.org/iso/home/standards/iso8601.htm)
+### Optimizations
+
+* OPT: preserve order for override keys. [Claudiu Topriceanu]
+
+
+## 0.1.2 (2019-07-29)
+
+### Optimizations
+
+* OPT: fix travis-ci badge and badges in same line. [Charles David]
+
+
+## 0.1.0
+
+### New
+
+* NEW: Initial implementation
