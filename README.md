@@ -6,6 +6,7 @@ Python settings for cloud environments
 [![image](https://img.shields.io/codecov/c/github/kpn/settings-vial/master.svg)](https://codecov.io/github/kpn/settings-vial?branch=master)
 [![image](https://img.shields.io/pypi/v/settings-vial)](https://pypi.python.org/pypi/settings-vial)
 [![image](https://readthedocs.org/projects/settings-vial/badge/?version=latest)](https://settings-vial.readthedocs.org/en/latest/?badge=latest)
+![image](https://img.shields.io/badge/code%20style-black-000000.svg)]
 
 ## Usage
 
@@ -18,7 +19,7 @@ $ export MY_APP_TEST_VAR=42
 >>> from settings_vial import Settings
 >>> settings = Settings(env_prefix="MY_APP_")
 >>> settings.load_env()
->>> setttings.TEST_VAR
+>>> settings.TEST_VAR
 42
 ```
 

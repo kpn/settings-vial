@@ -121,7 +121,7 @@ class Settings:
             if var.startswith(self.override_prefix):
                 vars_to_delete.append(var)
                 _, stripped_var_name = var.split(self.override_prefix, 1)
-                override_key, var_name = stripped_var_name.split('_', 1)
+                override_key, var_name = stripped_var_name.split("_", 1)
                 override_dict = {var_name: self._config[var]}
                 try:
                     self._override_config[override_key].update(override_dict)
