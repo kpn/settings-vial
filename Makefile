@@ -60,3 +60,6 @@ docker/%:
 	$(DOCKER_COMPOSE) run --rm app make $*
 
 build: clean venv tox
+
+changelog: venv
+	venv/bin/gitchangelog
