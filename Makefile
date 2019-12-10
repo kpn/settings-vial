@@ -28,6 +28,7 @@ venv:
 	@python3.6 -m venv venv
 	@$(PIP) install -U "pip>=7.0" -q
 	@$(PIP) install -r $(DEPS)
+	@$(PIP) install -e .
 
 test: clean tox check_dependency_tree
 

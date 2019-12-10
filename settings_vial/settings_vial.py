@@ -2,6 +2,8 @@ import json
 import warnings
 from os import environ
 
+from dotenv import dotenv_values
+
 from .exceptions import MissingOverrideKeysWarning, NotCallableWarning, UnsupportedSetTypeWarning
 
 
@@ -15,12 +17,16 @@ class Settings:
     Usage::
 
         $ export MY_APP_TEST_VAR=42
+        $ echo 'MY_APP_SECRET=t0p5ecre+' > /tmp/secrets.env
 
         >>> from settings_vial import Settings
         >>> settings = Settings(env_prefix="MY_APP_")
         >>> settings.load_env()
+        >>> settings.load_dotenv_file("/tmp/secrets.env")
         >>> settings.TEST_VAR
         42
+        >>> settings.SECRET
+        't0p5ecre+'
     """
 
     def __init__(
@@ -88,12 +94,22 @@ class Settings:
         The override prefix is also stripped out, and these dynamic settings will consider the first
         string under a ``_`` split to be its key.
         """
-        for var, value in environ.items():
+        self._load_dict(environ)
+
+    def load_dotenv_file(self, path):
+        """ Loads configuration from .env files as json encoded values.
+
+        Works the same way as ``load_env``, but reads values from .env file instead of environment variables.
+        """
+        self._load_dict(dotenv_values(dotenv_path=path))
+
+    def _load_dict(self, _dict):
+        for var, value in _dict.items():
             if var.startswith(self.env_prefix):
                 _, var_name = var.split(self.env_prefix, 1)
                 # This try/except is needed to catch plain strings, for all the other types the JSON Decoder
                 # works as expected, but when trying to load a plain string it fails expecting it to be
-                # surrouded with `{}`.
+                # surrounded with `{}`.
                 try:
                     json_value = json.loads(value)
                 except json.decoder.JSONDecodeError:
@@ -123,10 +139,7 @@ class Settings:
                 _, stripped_var_name = var.split(self.override_prefix, 1)
                 override_key, var_name = stripped_var_name.split("_", 1)
                 override_dict = {var_name: self._config[var]}
-                try:
-                    self._override_config[override_key].update(override_dict)
-                except KeyError:
-                    self._override_config[override_key] = override_dict
+                self._override_config.setdefault(override_key, {}).update(override_dict)
 
         for var in vars_to_delete:
             del self._config[var]
