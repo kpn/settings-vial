@@ -1,18 +1,14 @@
 # This Makefile requires the following commands to be available:
 # * python3.6
-# * docker
-# * docker-compose
 
-DEPS:=requirements.txt
-DOCKER_COMPOSE=$(shell which docker-compose)
+DEPS=requirements.txt
 
-PIP:="venv/bin/pip"
-CMD_FROM_VENV:=". venv/bin/activate; which"
-TOX=$(shell "$(CMD_FROM_VENV)" "tox")
-PYTHON=$(shell "$(CMD_FROM_VENV)" "python")
+PIP="venv/bin/pip"
+TOX="venv/bin/tox"
+PYTHON="venv/bin/python"
 TOX_PY_LIST="$(shell $(TOX) -l | grep ^py | xargs | sed -e 's/ /,/g')"
 
-.PHONY: clean docsclean pyclean test lint isort format docs docker
+.PHONY: clean pyclean test lint isort format docker
 
 tox: venv
 	$(TOX)
@@ -22,10 +18,7 @@ pyclean:
 	@rm -rf *.egg-info build
 	@rm -rf coverage.xml .coverage
 
-docsclean:
-	@rm -fr docs/_build/
-
-clean: pyclean docsclean
+clean: pyclean
 	@rm -rf venv
 
 check_dependency_tree: venv
@@ -49,15 +42,6 @@ isort: venv
 
 format: venv
 	@$(TOX) -e isort-fix,black-fix
-
-docs: venv
-	@$(TOX) -e docs
-
-docker:
-	$(DOCKER_COMPOSE) run --rm app bash
-
-docker/%:
-	$(DOCKER_COMPOSE) run --rm app make $*
 
 build: clean venv tox
 
