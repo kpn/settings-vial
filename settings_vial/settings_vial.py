@@ -6,6 +6,12 @@ from dotenv import dotenv_values
 
 from .exceptions import MissingOverrideKeysWarning, NotCallableWarning, UnsupportedSetTypeWarning
 
+try:
+    from json.decode import JSONDecodeError
+except ImportError:
+    # Python2.7 does not have this exception, it simply raises ValueError
+    JSONDecodeError = ValueError
+
 
 class Settings:
     r"""Settings from environment variables.
@@ -112,7 +118,7 @@ class Settings:
                 # surrounded with `{}`.
                 try:
                     json_value = json.loads(value)
-                except json.decoder.JSONDecodeError:
+                except JSONDecodeError:
                     json_value = value
 
                 self._config.update({var_name: json_value})
