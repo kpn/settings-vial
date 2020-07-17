@@ -1,4 +1,5 @@
 import pytest
+
 from settings_vial import Settings
 from settings_vial.exceptions import MissingOverrideKeysWarning, NotCallableWarning, UnsupportedSetTypeWarning
 

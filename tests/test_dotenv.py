@@ -1,4 +1,5 @@
 import pytest
+
 from settings_vial import Settings
 
 
@@ -15,8 +16,16 @@ def mock_envfile(tmp_path):
         " it is a certificate value ",
         "===END PUBLIC CERTIFICATE==='",
     )
-    tmp_file.write_text("\n".join(lines))
-    return tmp_file
+    data = "\n".join(lines)
+    try:
+        # Python2 requires unicode, so we need to convert
+        data = data.decode("utf-8")
+    except AttributeError:
+        # Python3 does not have str.decode, but write_text accepts str, so no conversion necessary
+        pass
+
+    tmp_file.write_text(data)
+    return str(tmp_file)
 
 
 class TestEnvfileSettings:

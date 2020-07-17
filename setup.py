@@ -1,3 +1,4 @@
+from io import open  # for python 2.7: reading file with encoding
 from os import path
 from setuptools import setup, find_packages
 
@@ -31,6 +32,8 @@ setup(
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
