@@ -1,3 +1,4 @@
+import copy
 import json
 import warnings
 from os import environ
@@ -90,7 +91,7 @@ class Settings:
         return override_keys
 
     def load_env(self):
-        r""" Loads configuration from environment variables as json encoded.
+        r"""Loads configuration from environment variables as json encoded.
 
         Will load all environment variables containing **env_prefix** as a prefix and strip
         the prefix so you can access it through attributes normally: ``settings.VAR``.
@@ -103,7 +104,7 @@ class Settings:
         self._load_dict(environ)
 
     def load_dotenv_file(self, path):
-        """ Loads configuration from .env files as json encoded values.
+        """Loads configuration from .env files as json encoded values.
 
         Works the same way as ``load_env``, but reads values from .env file instead of environment variables.
         """
@@ -127,7 +128,7 @@ class Settings:
             self._load_overrides()
 
     def _load_overrides(self):
-        r""" Traverses through the already loaded prefixed environment variables and
+        r"""Traverses through the already loaded prefixed environment variables and
         extracts the overridable ones.
 
         If any of the environment variables loaded contains **override_prefix** the prefix will be stripped
@@ -149,3 +150,6 @@ class Settings:
 
         for var in vars_to_delete:
             del self._config[var]
+
+    def as_dict(self):
+        return copy.deepcopy(self._config)

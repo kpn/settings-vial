@@ -61,3 +61,11 @@ class TestEnvfileSettings:
         settings.load_dotenv_file(mock_envfile)
 
         assert settings.SOME_KEY_PREFIX_REPEATED == "nested"
+
+    def test_as_dict(self, mock_envfile):
+        settings = Settings(env_prefix="PREFIX_")
+        settings.load_dotenv_file(mock_envfile)
+
+        as_dict = settings.as_dict()
+        assert as_dict == settings._config
+        assert isinstance(as_dict, dict)
