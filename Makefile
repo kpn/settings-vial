@@ -1,5 +1,5 @@
 # This Makefile requires the following commands to be available:
-# * python3.6
+# * python3.10
 
 DEPS=requirements.txt
 
@@ -25,7 +25,7 @@ check_dependency_tree: venv
 	@$(PIP) check
 
 venv:
-	@python3.6 -m venv venv
+	@python3.10 -m venv venv
 	@$(PIP) install -U "pip>=7.0" -q
 	@$(PIP) install -r $(DEPS)
 	@$(PIP) install -e .
