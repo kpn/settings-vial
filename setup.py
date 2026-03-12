@@ -19,7 +19,7 @@ setup(
     author_email="charles.moraes@kpn.com",
     url="https://github.com/kpn/settings-vial",
     install_requires=[
-        "python-dotenv>=0.10.3,<1.0.0"
+        "python-dotenv>=0.10.3,<2.0.0"
     ],
     packages=find_packages(exclude=["settings_vial.tests*"]),
     tests_require=["tox"],
@@ -27,16 +27,17 @@ setup(
     zip_safe=False,
     license="Apache 2.0",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 7 - Inactive",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
